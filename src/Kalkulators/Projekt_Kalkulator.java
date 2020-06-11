@@ -61,25 +61,24 @@ public class Projekt_Kalkulator {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.setBounds(100, 100, 320, 480);
+		frame.setBounds(100, 100, 380, 420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		textField = new JTextField();
 		textField.setHorizontalAlignment(SwingConstants.RIGHT);
 		textField.setFont(new Font("Tahoma", Font.BOLD, 25));
-		textField.setBounds(20, 10, 270, 50);
+		textField.setBounds(20, 10, 320, 50);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		JRadioButton buttonTurnOFF = new JRadioButton("OFF");
-		//buttonTurnOFF.setEnabled(false);
 		JRadioButton buttonTurnON = new JRadioButton("ON");
 		buttonTurnON.setEnabled(false);
 		
 		
 
-		// Przyciski 
+		// Przyciski numerów
 		
 		JButton number1 = new JButton("1");
 		number1.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -191,22 +190,7 @@ public class Projekt_Kalkulator {
 		number0.setBounds(40, 310, width, height);
 		frame.getContentPane().add(number0);
 		
-		JButton buttonPM = new JButton("+/-");
-		buttonPM.setFont(new Font("Tahoma", Font.BOLD, 9));
-		buttonPM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				String tmp = textField.getText();
-				tmp = tmp.replace(',','.');
-				textField.setText(tmp);
-				
-				double opposite = Double.parseDouble((textField.getText()));
-				opposite = opposite * (-1);
-				textField.setText(String.valueOf(opposite));
-			}
-		});
-		buttonPM.setBounds(220, 310, width, height);
-		frame.getContentPane().add(buttonPM);
+		// Sterowanie operatorami dwu-argumentowymi
 		
 		JButton buttonEQUAL = new JButton("=");
 		buttonEQUAL.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -215,30 +199,34 @@ public class Projekt_Kalkulator {
 				
 				String answer;
 				secondnumber = Double.parseDouble(textField.getText());
-				if(operations == "+")
+				
+				switch(operations)
 				{
-					result = firstnumber + secondnumber;
-					answer = String.format("%.2f",result);
-					textField.setText(answer);
+					case "+":
+						result = firstnumber + secondnumber;
+						break;
+					case "-":
+						result = firstnumber - secondnumber;
+						break;
+					case "*":
+						result = firstnumber * secondnumber;
+						break;
+					case "/":
+						result = firstnumber / secondnumber;
+						break;
+					case "%":
+						result = firstnumber % secondnumber;
+						break;
+					case "^":
+						result = Math.pow(firstnumber, secondnumber);
+						break;
 				}
-				else if(operations == "-")
-				{
-					result = firstnumber - secondnumber;
-					answer = String.format("%.2f",result);
-					textField.setText(answer);
-				}
-				else if(operations == "*")
-				{
-					result = firstnumber * secondnumber;
-					answer = String.format("%.2f",result);
-					textField.setText(answer);
-				}
-				else if(operations == "/")
-				{
-					result = firstnumber / secondnumber;
-					answer = String.format("%.2f",result);
-					textField.setText(answer);
-				}
+			    if(result == (long) result)
+			    	answer = String.format("%d",(long)result);
+			    else
+			    	answer = String.format("%s",result);
+				//answer = String.format("%f",result);
+				textField.setText(answer);
 			}
 		});
 		buttonEQUAL.setBounds(160, 310, width, height);
@@ -312,6 +300,42 @@ public class Projekt_Kalkulator {
 		buttonDIVISION.setBounds(220, 250, width, height);
 		frame.getContentPane().add(buttonDIVISION);
 		
+		JButton buttonPOW_Y = new JButton("x^y");
+		buttonPOW_Y.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String tmp = textField.getText();
+				tmp = tmp.replace(',','.');
+				textField.setText(tmp);
+				
+				firstnumber = Double.parseDouble(textField.getText());
+				textField.setText("");
+				operations = "^";
+			}
+		});
+		buttonPOW_Y.setFont(new Font("Tahoma", Font.BOLD, 10));
+		buttonPOW_Y.setBounds(280, 190, 55, 55);
+		frame.getContentPane().add(buttonPOW_Y);
+		
+		// Sterowanie operatorami jednoargumentowymi
+		
+		JButton buttonPM = new JButton("+/-");
+		buttonPM.setFont(new Font("Tahoma", Font.BOLD, 9));
+		buttonPM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String tmp = textField.getText();
+				tmp = tmp.replace(',','.');
+				textField.setText(tmp);
+				
+				double opposite = Double.parseDouble((textField.getText()));
+				opposite = opposite * (-1);
+				textField.setText(String.valueOf(opposite));
+			}
+		});
+		buttonPM.setBounds(220, 310, width, height);
+		frame.getContentPane().add(buttonPM);
+		
 		JButton buttonDOT = new JButton(".");
 		buttonDOT.setFont(new Font("Tahoma", Font.BOLD, 11));
 		buttonDOT.addActionListener(new ActionListener() {
@@ -360,6 +384,74 @@ public class Projekt_Kalkulator {
 		buttonCLEAR.setBounds(160, 70, width, height);
 		frame.getContentPane().add(buttonCLEAR);
 		
+		JButton buttonMOD = new JButton("%");
+		buttonMOD.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String tmp = textField.getText();
+				tmp = tmp.replace(',','.');
+				textField.setText(tmp);
+				
+				firstnumber = Double.parseDouble(textField.getText());
+				textField.setText("");
+				operations = "%";
+			}
+		});
+		buttonMOD.setFont(new Font("Tahoma", Font.BOLD, 11));
+		buttonMOD.setBounds(280, 70, width, height);
+		frame.getContentPane().add(buttonMOD);
+		
+		JButton buttonPOW = new JButton("x^2");
+		buttonPOW.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tmp = textField.getText();
+				tmp = tmp.replace(',','.');
+				textField.setText(tmp);
+				
+				double power = Double.parseDouble((textField.getText()));
+				power = Math.pow(power, 2);
+				textField.setText(String.valueOf(power));
+			}
+		});
+		buttonPOW.setFont(new Font("Tahoma", Font.BOLD, 10));
+		buttonPOW.setBounds(280, 130, width, height);
+		frame.getContentPane().add(buttonPOW);
+		
+		JButton buttonSQRT = new JButton("\u221Ax");
+		buttonSQRT.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tmp = textField.getText();
+				tmp = tmp.replace(',','.');
+				textField.setText(tmp);
+				
+				double power = Double.parseDouble((textField.getText()));
+				power = Math.sqrt(power);
+				textField.setText(String.valueOf(power));
+				
+			}
+		});
+		buttonSQRT.setFont(new Font("Tahoma", Font.BOLD, 11));
+		buttonSQRT.setBounds(280, 250, width, height);
+		frame.getContentPane().add(buttonSQRT);
+		
+		JButton buttonABS = new JButton("abs");
+		buttonABS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tmp = textField.getText();
+				tmp = tmp.replace(',','.');
+				textField.setText(tmp);
+				
+				double absolute = Double.parseDouble((textField.getText()));
+				if (absolute < 0)
+					absolute = -absolute;
+				textField.setText(String.valueOf(absolute));
+			}
+		});
+		buttonABS.setFont(new Font("Tahoma", Font.BOLD, 11));
+		buttonABS.setBounds(280, 310, 55, 55);
+		frame.getContentPane().add(buttonABS);
+		
+		// Obsluga mechanizmu w³¹czania i wy³¹czania kalkulatora.
 		
 		buttonTurnON.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -388,6 +480,11 @@ public class Projekt_Kalkulator {
 				buttonBACKSPACE.setEnabled(true);
 				buttonEQUAL.setEnabled(true);
 				buttonDOT.setEnabled(true);	
+				buttonMOD.setEnabled(true);
+				buttonPOW.setEnabled(true);
+				buttonPOW_Y.setEnabled(true);
+				buttonSQRT.setEnabled(true);
+				buttonABS.setEnabled(true);
 			}
 		});
 		buttonGroup.add(buttonTurnON);
@@ -428,6 +525,11 @@ public class Projekt_Kalkulator {
 				buttonBACKSPACE.setEnabled(false);
 				buttonEQUAL.setEnabled(false);
 				buttonDOT.setEnabled(false);
+				buttonMOD.setEnabled(false);
+				buttonPOW.setEnabled(false);
+				buttonPOW_Y.setEnabled(false);
+				buttonSQRT.setEnabled(false);
+				buttonABS.setEnabled(false);
 			}
 		});
 		buttonGroup.add(buttonTurnOFF);
@@ -436,7 +538,8 @@ public class Projekt_Kalkulator {
 		frame.getContentPane().add(buttonTurnOFF);
 		
 
+		
+
 
 	}
-	
 }
